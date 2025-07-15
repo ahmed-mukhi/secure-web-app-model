@@ -87,6 +87,19 @@ flowchart TD
     C --> H[Logging with Winston]
 ```
 
+## ⚠️ Risk Register
+
+
+```
+| Risk ID | Description                | Likelihood | Impact | Control                                    | Status           |
+|---------|----------------------------|------------|--------|--------------------------------------------|------------------|
+| R-01    | Brute force login          | Medium     | High   | Rate limiter (5 req/min)                   | Mitigated        |
+| R-02    | Weak session protection    | Medium     | High   | `HttpOnly`, `Secure`, `SameSite` cookies   | Mitigated        |
+| R-03    | Unvalidated user input     | High       | High   | Partial validation (email, password only)  | Needs Improvement|
+| R-04    | Log injection via input    | Medium     | Medium | Structured logging with Winston            | Mitigated        |
+| R-05    | TLS downgrade / missing cert | Low      | High   | Enforced TLS 1.2+ with OpenSSL cert        | Mitigated        |
+```
+
 
 
 ## 📁 Project Structure
