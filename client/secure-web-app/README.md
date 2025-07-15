@@ -1,70 +1,119 @@
-# Getting Started with Create React App
+# Secure Web App Model
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a secure full-stack web application built using Node.js and React.
 
-## Available Scripts
+The app implements modern security practices including:
 
-In the project directory, you can run:
+- HTTPS/TLS encryption using OpenSSL certificates
+- Two-factor authentication (2FA) with TOTP
+- Security headers (CSP, HSTS, etc.)
+- Rate limiting and input sanitization
+- Logging and basic monitoring setup
 
-### `npm start`
+## 🚀 Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prerequisites
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Node.js (v14+)
+- npm
+- OpenSSL installed on your system
 
-### `npm test`
+### Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository:
 
-### `npm run build`
+```bash
+git clone https://github.com/ahmed-mukhi/secure-web-app-model.git
+cd secure-web-app-model
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Generate self-signed TLS certificates:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+openssl req -nodes -new -x509 -keyout server.key -out server.crt \
+-subj "/CN=localhost" -days 365
+mv server.key server.crt server/server/certs/
+```
+3. Install dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+cd server
+npm install
 
-### `npm run eject`
+cd ../client
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+4. Run the application
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Start backend
+cd server
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Start frontend
+cd ../client
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
 
-## Learn More
+### Access the App
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+-Frontend: http://localhost:3000
+-Backend (API): https://localhost:8443
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## 🔐 Security Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- ✅ **HTTPS/TLS**: All communication is encrypted using TLS (via self-signed OpenSSL certificates).
+- ✅ **Two-Factor Authentication (2FA)**: Users are required to verify their identity using TOTP codes.
+- ✅ **Security Headers**: Includes CSP, HSTS, X-Content-Type-Options, and X-Frame-Options for frontend protection.
+- ✅ **Input Validation**: User input is sanitized to prevent injection attacks using packages like `validator.js`.
+- ✅ **Rate Limiting**: API endpoints are protected against brute-force attacks with `express-rate-limit`.
+- ✅ **Secure Cookies**: Sessions use cookies with `HttpOnly`, `Secure`, and `SameSite=Strict` flags.
+- ✅ **Basic Logging**: Logs login attempts and errors in JSON format using `winston`, to simulate monitoring readiness.
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🗺️ Architecture Diagram
 
-### Making a Progressive Web App
+```mermaid
+flowchart TD
+    A[User Browser] --> B[React Frontend]
+    B --> C[Node.js Backend]
+    C --> D[TOTP Verification]
+    C --> E[HTTPS TLS Certificate]
+    C --> F[Secure Cookie Handler]
+    C --> G[Rate Limiting Middleware]
+    C --> H[Logging with Winston]
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 📁 Project Structure
 
-### Deployment
+```
+secure-web-app-model/
+├── client/ # React frontend (secure login interface)
+│ └── ... # (Component files, assets, etc.)
+├── server/ # Node.js backend with secure endpoints
+│ ├── certs/ # TLS certificates
+│ ├── routes/ # Authentication and API routes
+│ ├── middlewares/ # Security middlewares (rate limit, headers, etc.)
+│ ├── logs/ # JSON log files (auth events, errors)
+│ └── app.js # Express server setup
+└── README.md # Project documentation
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📋 Planned Enhancements
 
-### `npm run build` fails to minify
+- 🔍 Integration with Wazuh or ELK stack for advanced log analysis
+- 📊 Create a compliance mapping file (NIST 800-53 / OWASP Top 10)
+- 🧪 Add automated security testing using OWASP ZAP and Supertest
+- 🛡️ Include a threat model and incident response flow
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## 📄 License
+
+This project is licensed under the MIT License — feel free to use and adapt with credit.
+
+
